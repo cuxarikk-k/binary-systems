@@ -15,11 +15,15 @@ def binary_to_decimal():
     if binary.startswith("0b"):
       binary = binary[2:]
     else:
-      print("Please enter a hexadecimal number with the prefix 0b.")
-      continue
+      print("Please enter a binary number with the prefix 0b.")
+      break
     for i in range(len(binary)):
-      decimal += int(binary[i]) * (2 ** (len(binary) - i - 1))
-    return decimal
+      if binary[i] not in ["0", "1"]:
+        print("Please enter a binary number with only 0s and 1s.")
+        break
+      else:
+        decimal += int(binary[i]) * (2 ** (len(binary) - i - 1))      
+        return decimal
 
 def decimal_to_hexadecimal():
   decimal = int(input("Enter a decimal number: "))
@@ -53,57 +57,55 @@ def hexadecimal_to_decimal():
       elif '0' <= hexadecimal[i] <= '9':
         decimal += int(hexadecimal[i]) * (16 ** (len(hexadecimal) - i - 1))
         return decimal
-      else:
+      else: 
         print("Please, enter valid hexadecimal number.")
-        continue
+        return None
 
-def decimal_to_base():
+def base_to_base():
   while True:
-    users_input = input("Enter a number with its base (e. g., 3123x4): ")
-    if "x" not in users_input:
+    users_input = input("Enter a number with its base (e. g., 3123x4) to convert to another base: ")
+    another_base = input("Enter the base to convert to (e.g., x16): ")
+    if ("x" not in users_input) or ("x" not in another_base):
       print("Please, enter a valid number with its base.")
       continue
-    decimal_to_base, base = users_input.split("x")
+      
+    base_to_base, base = users_input.split("x")
     base = int(base)
-    decimal = int(decimal_to_base)
-    based_number = ''
+    another_base = int(another_base[1:])
+    base_to_base = base_to_base.upper()
+    letters = {'A': 10, 'B': 11, 'C': 12, 'D': 13, 'E': 14, 'F': 15}
     symbols = '0123456789ABCDEF'
-    if base < 2 or base > 16:
+    decimal = 0
+    based_number = ''
+    
+    for i in base_to_base:
+      if i in letters and letters[i] >= base:
+        print("Please, enter a valid number with this base.")
+        continue
+      elif "0" <= i <= "9" and int(i) >= base:
+        print("Please, enter a valid number with this base.")
+        continue
+        
+    if (base < 2 or base > 16) or (another_base < 2 or another_base > 16):
       print("Please, enter a base between 2 and 16.")
       continue
+    for i in range(len(base_to_base)):
+      if base_to_base[i] in letters:
+        decimal += letters[base_to_base[i]] * (base ** (len(base_to_base) - i - 1))
+      elif '0' <= base_to_base[i] <= '9':
+        decimal += int(base_to_base[i]) * (base ** (len(base_to_base) - i - 1))
+        
     if decimal == 0:
       return "0"
-    while decimal > 0:
-      based_number = symbols[decimal % base] + based_number
-      decimal = decimal // base
-    return based_number
-
-def base_to_decimal():
-  while True:
-    users_input = input("Enter a number with its base (e. g., 3123x4) to convert to decimal: ")
-    if "x" not in users_input:
-      print("Please, enter a valid number with its base.")
-      return None
-    base_to_decimal, base = users_input.split("x")
-    letters = {'A': 10, 'B': 11, 'C': 12, 'D': 13, 'E': 14, 'F': 15}
-    base = int(base)
-    decimal = 0
-    if base < 2 or base > 16:
-      print("Please, enter a base between 2 and 16.")
-      continue
-    for i in range(len(base_to_decimal)):
-      if base_to_decimal[i] in letters:
-        decimal += letters[base_to_decimal[i]] * (base ** (len(base_to_decimal) - i - 1))
-      elif '0' <= base_to_decimal[i] <= '9':
-        decimal += int(base_to_decimal[i]) * (base ** (len(base_to_decimal) - i - 1))
-      else:
-        print("Please, enter a valid number with its base.")
     else:
-      return decimal
+      while decimal > 0:
+        based_number = symbols[decimal % another_base] + based_number
+        decimal = decimal // another_base
+      return based_number
 
 def conversation():
   while True:
-    choice = int(input("Press: \n1.decimal to binary \n2.binary to decimal \n3.decimal to hexadecimal \n4.hexadecimal to decimal \n5.decimal to base \n6.base to decimal"))
+    choice = int(input("Press: \n1.decimal to binary \n2.binary to decimal \n3.decimal to hexadecimal \n4.hexadecimal to decimal \n5.base to base"))
     if choice == 1:
       print(decimal_to_binary())
     elif choice == 2:
@@ -113,12 +115,10 @@ def conversation():
     elif choice == 4:
       print(hexadecimal_to_decimal())
     elif choice == 5:
-      print(decimal_to_base())
-    elif choice == 6:
-      print(base_to_decimal())
+      print(base_to_base())
     else:
       print("Please, enter a valid number.")
-      continue
+      return None
     to_continue = input("Do you want to continue?").lower()
     if to_continue == "yes":
       continue
