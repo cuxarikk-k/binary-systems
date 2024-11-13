@@ -16,7 +16,7 @@ def binary_to_decimal():
       binary = binary[2:]
     else:
       print("Please enter a hexadecimal number with the prefix 0b.")
-      return None
+      continue
     for i in range(len(binary)):
       decimal += int(binary[i]) * (2 ** (len(binary) - i - 1))
     return decimal
@@ -45,7 +45,7 @@ def hexadecimal_to_decimal():
       hexadecimal = hexadecimal[2:].upper()
     else:
       print("Please enter a hexadecimal number with the prefix 0x.")
-      return None
+      continue
     for i in range(len(hexadecimal)):
       if hexadecimal[i] in letters:
         decimal += letters[hexadecimal[i]] * (16 ** (len(hexadecimal) - i - 1))
@@ -55,7 +55,7 @@ def hexadecimal_to_decimal():
         return decimal
       else:
         print("Please, enter valid hexadecimal number.")
-        return None
+        continue
 
 def decimal_to_base():
   while True:
@@ -118,7 +118,7 @@ def conversation():
       print(base_to_decimal())
     else:
       print("Please, enter a valid number.")
-      return None
+      continue
     to_continue = input("Do you want to continue?").lower()
     if to_continue == "yes":
       continue
